@@ -1,0 +1,42 @@
+
+#لإستيراد ملف إكسيل بداخل جوبيتر 
+import pandas as pd
+
+# تحديث مسار الملف إلى المسار الصحيح
+file_path = "C:/Users/Hi Tech/Desktop/شهور.xlsx"
+
+# استيراد ملف Excel
+df = pd.read_excel(file_path)
+
+# إعدادات العرض لعرض جميع الصفوف والأعمدة
+pd.set_option('display.max_rows', None)   # عرض جميع الصفوف
+
+# عرض البيانات بالكامل
+print(df)
+.0
+
+
+print(df.isna())
+
+
+df_filled = df.fillna(0)
+print(df_filled)
+
+
+average_revenue = df['revenue'].mean()
+
+# ملء القيم المفقودة في عمود revenue بالمتوسط
+df['revenue'].fillna(average_revenue, inplace=True)
+
+# عرض البيانات بعد ملء القيم المفقودة
+print(df)
+
+
+df_cleaned = df.dropna()
+print(df_cleaned)
+
+
+
+df['monthly_change'] = df['revenue'].pct_change()
+print(df[['revenue', 'monthly_change']])
+
