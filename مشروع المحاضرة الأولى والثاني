@@ -1,0 +1,32 @@
+#اكواد المشروع 
+
+#1 نقوم برفع ملف بيانات مناطق في جوبيتر به عمود region - revenue 
+
+#2 استيراده واظهار جميع الصفوف
+import pandas as pd
+
+file_name = "بيانات مناطق.csv"
+
+df = pd.read_csv(file_name, sep=';')
+pd.set_option("display.max_rows", None)
+print(df)
+
+
+#3 التحقق من القيم المفقودة 
+print(df.isna().sum())
+
+#4الحذف:
+
+df_cleaned = df.dropna()
+#5الملء بالقيمة صفر:
+
+df.fillna(0, inplace=True)
+
+#6 المتوسط
+average_revenue = df['revenue'].mean()
+print("متوسط الإيرادات:", average_revenue)
+
+#7
+
+
+
