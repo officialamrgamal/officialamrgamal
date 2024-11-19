@@ -26,7 +26,46 @@ df.fillna(0, inplace=True)
 average_revenue = df['revenue'].mean()
 print("متوسط الإيرادات:", average_revenue)
 
-#7
+
+#7 قم برسم مخطط عمودي
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# قراءة ملف الإكسيل
+file_name = "بيانات مناطق.csv"
+
+df = pd.read_csv(file_name, sep=';')
+# تجميع البيانات حسب المنطقة وحساب الإيرادات
+df.groupby('region')['revenue'].sum().plot(kind='bar')
+
+# إضافة العنوان والعناوين للمحاور
+plt.title("revenues by Region")
+plt.xlabel("region")
+plt.ylabel("revenues")
+
+# عرض الرسم البياني
+plt.show()
+
+
+#8انشاء جدول محوري 
+pivot_table = df.pivot_table(values='revenue', index='region', aggfunc='sum')
+print(pivot_table)
+
+
+#9 قم بإستخدام مكتبة pandas & numpy لعمل عمود جديد لمعرفة الإيرادات العالية والمنخفضة
+import pandas as pd
+import numpy as np
+
+df["performance"] = np.where(df["revenue"] >= 1200, "High", "Low")
+
+# عرض البيانات
+print(df)
+
+#ارسال البيانات بالعمود الجديد  لملف اكسيل موجود على سطح المكتب بإسم 
+#revenues nov
+
+df.to_excel("C:/Users/hi tech/Desktop/revenues nov.xlsx", index=False)
+
 
 
 
