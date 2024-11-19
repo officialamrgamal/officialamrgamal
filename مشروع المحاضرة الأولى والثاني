@@ -61,7 +61,7 @@ df["performance"] = np.where(df["revenue"] >= 1200, "High", "Low")
 # عرض البيانات
 print(df)
 
-#ارسال البيانات بالعمود الجديد  لملف اكسيل موجود على سطح المكتب بإسم 
+#10ارسال البيانات بالعمود الجديد  لملف اكسيل موجود على سطح المكتب بإسم 
 #revenues nov
 
 df.to_excel("C:/Users/hi tech/Desktop/revenues nov.xlsx", index=False)
