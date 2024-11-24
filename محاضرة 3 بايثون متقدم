@@ -1,0 +1,123 @@
+#مكتبة sktlearn
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+# استيراد البيانات من ملف CSV بفاصلة منقوطة
+data = pd.read_csv('بيانات مناطق.csv', sep=';')
+
+# تحويل العمود 'region' إلى قيم رقمية باستخدام LabelEncoder
+label_encoder = LabelEncoder()
+data['region_encoded'] = label_encoder.fit_transform(data['region'])
+
+# تحديد المدخلات (X) والمتغير الهدف (y)
+X = data[['region_encoded']]  # المدخلات هي المنطقة المُرمزة
+y = data['revenue']  # المتغير الهدف هو الإيرادات
+
+# تقسيم البيانات إلى تدريب واختبار (80% تدريب، 20% اختبار)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# إنشاء نموذج انحدار خطي
+model = LinearRegression()
+
+# تدريب النموذج
+model.fit(X_train, y_train)
+
+# التنبؤ باستخدام البيانات الاختبارية
+y_pred = model.predict(X_test)
+
+# عرض التنبؤات مع القيم الحقيقية
+predictions = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
+print(predictions)
+
+# **التنبؤ بالإيرادات للبيانات الجديدة:**
+# تحديد مناطق معينة للتنبؤ بالإيرادات (افترضنا هنا بعض المناطق الجديدة)
+regions_to_predict = ['sohag', 'giza', 'asiut']
+
+# تحويل المناطق الجديدة إلى قيم رقمية باستخدام نفس LabelEncoder
+regions_encoded = label_encoder.transform(regions_to_predict)
+
+# إنشاء DataFrame للمناطق الجديدة
+new_data = pd.DataFrame({'region_encoded': regions_encoded})
+
+# التنبؤ بالإيرادات باستخدام النموذج المدرب
+new_predictions = model.predict(new_data)
+
+# عرض التنبؤات للإيرادات للمناطق المحددة
+for region, prediction in zip(regions_to_predict, new_predictions):
+    print(f"التنبؤ بالإيرادات لمنطقة {region}: {prediction:.2f}")
+
+
+
+#لوحة بيانات 
+import pandas as pd
+import dash
+from dash import dcc, html
+import plotly.express as px
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+# تحميل البيانات من ملف CSV
+file_name = "بيانات مناطق.csv"
+df = pd.read_csv(file_name, sep=';')
+
+# معالجة القيم المفقودة
+df.fillna(0, inplace=True)
+
+# تحويل الأعمدة النصية إلى قيم رقمية
+label_encoder = LabelEncoder()
+df['region_encoded'] = label_encoder.fit_transform(df['region'])
+
+# تقسيم البيانات للنموذج
+X = df[['region_encoded']]
+y = df['revenue']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# إنشاء النموذج وتدريبه
+model = LinearRegression()
+model.fit(X_train, y_train)
+df_test = X_test.copy()
+df_test['Actual'] = y_test
+df_test['Predicted'] = model.predict(X_test)
+
+# إنشاء التطبيق
+app = dash.Dash(__name__)
+
+# تصميم واجهة المستخدم
+app.layout = html.Div([
+    html.H1("لوحة بيانات الإيرادات للمناطق", style={'text-align': 'center'}),
+
+    # رسم الإيرادات حسب المناطق (Bar Chart)
+    dcc.Graph(
+        id='bar-chart',
+        figure=px.bar(df.groupby('region')['revenue'].sum().reset_index(),
+                      x='region', y='revenue', title="إيرادات المناطق")
+    ),
+
+    # رسم توزيع الإيرادات (Pie Chart)
+    dcc.Graph(
+        id='pie-chart',
+        figure=px.pie(df, names='region', values='revenue', title="توزيع الإيرادات حسب المناطق")
+    ),
+
+    # رسم الإيرادات الفعلية مقابل التنبؤات (Line Chart)
+    dcc.Graph(
+        id='line-chart',
+        figure={
+            'data': [
+                {'x': df_test.index, 'y': df_test['Actual'], 'type': 'line', 'name': 'Actual'},
+                {'x': df_test.index, 'y': df_test['Predicted'], 'type': 'line', 'name': 'Predicted'}
+            ],
+            'layout': {'title': 'الإيرادات الفعلية مقابل التنبؤات'}
+        }
+    )
+])
+
+# تشغيل التطبيق
+if __name__ == '__main__':
+    app.run_server(debug=True, use_reloader=False)
+
+
+
