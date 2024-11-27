@@ -1,0 +1,28 @@
+#1 نذهب الي server -database - schemacs - table 
+#نقرة يمين create table ثم التسمية ب new 
+#نذهب لشكل الجدول بالأعلى
+
+#2 استيراد الملف 
+DROP TABLE IF EXISTS new;
+CREATE TABLE new (
+    region TEXT,
+    revenue NUMERIC
+);
+COPY new(region, revenue)
+FROM 'C:\\data\\region data.csv'
+DELIMITER ';'
+CSV HEADER;
+
+#2 فائدة where في التصفية
+
+SELECT * FROM new
+WHERE revenue > 5000;
+
+#3  التجميع ب group by 
+#عمل تصفية بعد التجميع ب having
+SELECT region, SUM(revenue) AS total_revenue
+FROM new
+GROUP BY region
+HAVING SUM(revenue) > 40000;
+
+#4 نعمل حفظ للملف علامة التنزيل ثم حفظ 
