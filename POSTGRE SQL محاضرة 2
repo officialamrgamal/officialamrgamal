@@ -19,8 +19,6 @@ SELECT * FROM new_region;
 #2
 
 
-
-
 SELECT *FROM new_region
 WHERE revenue > 5000 AND "date" > '2024-12-2';
 
@@ -53,8 +51,24 @@ WHERE revenue IS NULL;
 SELECT region, COALESCE(revenue, 0) AS revenue, "date"
 FROM new_region;
 
-
+#يحذف مسافات قبل او نهاية النص 
 UPDATE new_region
 SET region = TRIM(region);
+
+
+#يحذف مسافات بين الكلمات يجعلها مسافه واحدة
+UPDATE new_region
+SET region = REPLACE(region, '   ', ' ');
 SELECT * FROM new_region;
 
+
+
+
+#ملخص:تجميع الإيرادات حسب السنة 2024 مع شرط اكبر من 5 آلاف 
+SELECT region, SUM(revenue) AS total_revenue
+FROM new_region
+WHERE EXTRACT(YEAR FROM "date") = 2024 AND revenue > 5000
+GROUP BY region
+ORDER BY total_revenue asc;
+
+SELECT * FROM new_region;
