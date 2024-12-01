@@ -2,7 +2,7 @@
 #نقرة يمين create table ثم التسمية ب new 
 #نذهب لشكل الجدول بالأعلى
 
-#2 استيراد الملف 
+#2 استيراد الملف وعرض بيانات الجدول
 DROP TABLE IF EXISTS new;
 CREATE TABLE new (
     region TEXT,
@@ -12,6 +12,8 @@ COPY new(region, revenue)
 FROM 'C:\\data\\region data.csv'
 DELIMITER ';'
 CSV HEADER;
+#ثم عرض بيانات الجدول بهذا الكود
+SELECT * FROM new;
 
 #2 فائدة where في التصفية
 
