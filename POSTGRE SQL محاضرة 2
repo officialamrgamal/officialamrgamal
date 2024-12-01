@@ -1,0 +1,60 @@
+#1 اكواد استيراد جدول جديد به نوع بيانات تاريخ  وعرض البيانات 
+#بعد إنشاء جدول يسمى new_region بنقرة يمين ثم انشاء جدول 
+DROP TABLE IF EXISTS new_region;
+
+CREATE TABLE new_region (
+    region TEXT,
+    revenue NUMERIC,
+    "date" DATE
+);
+
+COPY new_region(region, revenue, "date")
+FROM 'C:\\data\\new region.csv'
+DELIMITER ';'
+CSV HEADER;
+
+SELECT * FROM new_region;
+
+
+#2
+
+
+
+
+SELECT *FROM new_region
+WHERE revenue > 5000 AND "date" > '2024-12-2';
+
+SELECT * FROM new_region
+WHERE revenue > 15000;
+
+SELECT *FROM new_region
+WHERE region LIKE 'giza';
+
+
+SELECT *FROM new_region
+WHERE "date" BETWEEN '2024-11-30' AND '2024-12-6';
+
+SELECT region, revenue, CURRENT_DATE - "date" AS days_since_sale
+FROM new_region;
+
+SELECT DISTINCT region
+FROM new_region;
+
+
+SELECT DISTINCT ON (region) region, revenue, "date"
+FROM new_region
+ORDER BY region, revenue DESC;
+
+
+SELECT * FROM new_region
+WHERE revenue IS NULL;
+
+
+SELECT region, COALESCE(revenue, 0) AS revenue, "date"
+FROM new_region;
+
+
+UPDATE new_region
+SET region = TRIM(region);
+SELECT * FROM new_region;
+
