@@ -1,5 +1,5 @@
 #1 نذهب الي server -database - schemacs - table 
-#نقرة يمين create table ثم التسمية ب new 
+#نقرة يمين create table ثم التسمية ب new_region 
 #نذهب لشكل الجدول بالأعلى
 
 #2 استيراد الملف وعرض بيانات الجدول
@@ -9,7 +9,7 @@ CREATE TABLE new (
     revenue NUMERIC
 );
 COPY new(region, revenue)
-FROM 'C:\\data\\region data.csv'
+FROM 'C:\\data\\new region.csv'
 DELIMITER ';'
 CSV HEADER;
 #ثم عرض بيانات الجدول بهذا الكود
