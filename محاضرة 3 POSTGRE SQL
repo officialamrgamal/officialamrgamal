@@ -8,11 +8,11 @@ WHERE revenue > 16000
 نسبة المساهمة
   SELECT 
     region,
-    date,
-    revenue,
-    SUM(revenue) OVER (PARTITION BY region ORDER BY date) AS cumulative_revenue
-FROM new_region;
-
+    SUM(revenue) AS total_revenue,
+    SUM(revenue) * 100.0 / SUM(SUM(revenue)) OVER () AS percentage_contribution
+FROM new_region
+GROUP BY region
+ORDER BY total_revenue DESC
 
 
 لمعرفة ايرادات الشهور لكل منطقة 
