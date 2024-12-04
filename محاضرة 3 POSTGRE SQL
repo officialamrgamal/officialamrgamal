@@ -1,0 +1,77 @@
+اعلى ايرادات في الشهور 
+SELECT *
+FROM new_region
+WHERE revenue > 16000
+  AND EXTRACT(MONTH FROM date) IN (11,12);
+
+
+نسبة المساهمة
+  SELECT 
+    region,
+    date,
+    revenue,
+    SUM(revenue) OVER (PARTITION BY region ORDER BY date) AS cumulative_revenue
+FROM new_region;
+
+
+
+لمعرفة ايرادات الشهور لكل منطقة 
+
+SELECT 
+    region,
+    EXTRACT(MONTH FROM date) AS month,
+    SUM(revenue) AS total_revenue
+FROM new_region
+GROUP BY region, EXTRACT(MONTH FROM date)
+ORDER BY region, month;
+
+
+الأداء الكمي 
+
+  SELECT 
+    region,
+    date,
+    revenue,
+    SUM(revenue) OVER (PARTITION BY region ORDER BY date) AS cumulative_revenue
+FROM new_region;
+
+
+ المتوسط على حسب الشهور 
+
+SELECT 
+    region,
+    EXTRACT(YEAR FROM date) AS year,
+    EXTRACT(MONTH FROM date) AS month,
+    AVG(revenue) AS avg_revenue
+FROM new_region
+GROUP BY region, EXTRACT(YEAR FROM date), EXTRACT(MONTH FROM date)
+ORDER BY region, year, month;
+
+
+تقسيم الإيرادات إلى فئات 
+
+SELECT 
+    region,
+    revenue,
+    NTILE(2) OVER (ORDER BY revenue DESC) AS revenue_quartile
+FROM new_region;
+
+
+
+
+هاام الكود يساعد في تحديد أكثر المنتجات مبيعًا في فترة زمنية محددة.
+
+SELECT 
+    product AS product_name, 
+    SUM(revenue) AS total_revenue
+FROM 
+    product_data
+WHERE 
+    "date" BETWEEN '2023-12-01' AND '2023-12-05'
+GROUP BY 
+    product
+ORDER BY 
+    total_revenue DESC
+
+
+LIMIT 2;
