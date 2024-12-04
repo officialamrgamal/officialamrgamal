@@ -1,5 +1,5 @@
 اعلى ايرادات في الشهور 
-SELECT *
+SELECT 
 FROM new_region
 WHERE revenue > 16000
   AND EXTRACT(MONTH FROM date) IN (11,12);
