@@ -71,4 +71,4 @@ WHERE EXTRACT(YEAR FROM "date") = 2024 AND revenue > 5000
 GROUP BY region
 ORDER BY total_revenue DESC;
 
-SELECT * FROM new_region;
+
