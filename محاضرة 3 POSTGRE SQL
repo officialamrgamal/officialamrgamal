@@ -1,11 +1,11 @@
-اعلى ايرادات في الشهور 
+#1 اعلى ايرادات في شهور المواسم 
 SELECT 
 FROM new_region
 WHERE revenue > 16000
   AND EXTRACT(MONTH FROM date) IN (11,12);
 
 
-نسبة المساهمة
+#2نسبة المساهمة
   SELECT 
     region,
     SUM(revenue) AS total_revenue,
@@ -15,7 +15,7 @@ GROUP BY region
 ORDER BY total_revenue DESC
 
 
-لمعرفة ايرادات الشهور لكل منطقة 
+#3لمعرفة ايرادات الشهور لكل منطقة 
 
 SELECT 
     region,
@@ -26,7 +26,7 @@ GROUP BY region, EXTRACT(MONTH FROM date)
 ORDER BY region, month;
 
 
- الأداء الكمي او التراكمي 
+#4 الأداء الكمي او التراكمي 
 
   SELECT 
     region,
@@ -36,7 +36,7 @@ ORDER BY region, month;
 FROM new_region;
 
 
- المتوسط على حسب الشهور 
+#5 المتوسط على حسب الشهور 
 
 SELECT 
     region,
@@ -48,7 +48,7 @@ GROUP BY region, EXTRACT(YEAR FROM date), EXTRACT(MONTH FROM date)
 ORDER BY region, year, month;
 
 
-تقسيم الإيرادات إلى فئات 
+#6تقسيم الإيرادات إلى فئات 
 
 SELECT 
     region,
@@ -59,7 +59,7 @@ FROM new_region;
 
 
 
-هاام الكود يساعد في تحديد أكثر المنتجات مبيعًا في فترة زمنية محددة.
+#7هاام الكود يساعد في تحديد أكثر المنتجات مبيعًا في فترة زمنية محددة.
 
 SELECT 
     product AS product_name, 
