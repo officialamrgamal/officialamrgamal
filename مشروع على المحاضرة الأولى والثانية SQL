@@ -33,29 +33,30 @@ WHERE region LIKE 'giza';
 SELECT *FROM new_region
 WHERE "date" BETWEEN '2024-10-30' AND '2024-11-4';
 
+#5 بيعد عدد الايام من تاريخ اخر بيع حتى التاريخ الحالي
 SELECT region, revenue, CURRENT_DATE - "date" AS days_since_sale
 FROM new_region;
 
 
-#5 وضح المناطق الفريدة تنازليا على حسب المبيعات والتاريخ
+#6 وضح المناطق الفريدة تنازليا على حسب المبيعات والتاريخ
 SELECT DISTINCT ON (region) region, revenue, "date"
 FROM new_region
 ORDER BY region, revenue DESC;
 
-#6 اظهر القيم الفارغه في الايرادات
+#7 اظهر القيم الفارغه في الايرادات
 SELECT * FROM new_region
 WHERE revenue IS NULL;
 
-#7استبدلها ب صفر
+#8استبدلها ب صفر
 SELECT region, COALESCE(revenue, 0) AS revenue, "date"
 FROM new_region;
 
-#8يحذف مسافات قبل او نهاية النص 
+#9يحذف مسافات قبل او نهاية النص 
 UPDATE new_region
 SET region = TRIM(region);
 
 
-#9يحذف مسافات بين الكلمات يجعلها مسافه واحدة
+#10يحذف مسافات بين الكلمات يجعلها مسافه واحدة
 UPDATE new_region
 SET region = REPLACE(region, '   ', ' ');
 SELECT * FROM new_region;
