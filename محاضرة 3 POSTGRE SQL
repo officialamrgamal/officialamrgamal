@@ -26,7 +26,7 @@ GROUP BY region, EXTRACT(MONTH FROM date)
 ORDER BY region, month;
 
 
-الأداء الكمي 
+ الأداء الكمي او التراكمي 
 
   SELECT 
     region,
