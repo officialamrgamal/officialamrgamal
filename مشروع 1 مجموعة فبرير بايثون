@@ -1,0 +1,41 @@
+#1 نقوم برفع ملف بيانات مناطق في جوبيتر به عمود 
+عملنا uploud
+
+#2 اكواد استيراده واظهار جميع الصفوف 
+import pandas as pd
+
+file_name = "بيانات مناطق.csv"
+df = pd.read_csv(file_name, sep=';')
+pd.set_option("display.max_rows", None)
+print(df)
+
+
+#3 لمعرفة الهيكله وعدد الصفوف والأعمدة
+print(df.info())
+
+#4 
+average_revenue = df['revenue'].mean()
+print("متوسط الإيرادات:", average_revenue)
+
+
+
+#5 جدول محوري
+
+pivot_table = df.pivot_table(values='revenue', index='region', aggfunc='sum')
+print(pivot_table)
+
+#6 قم بإستخدام مكتبة pandas & numpy لعمل عمود جديد لمعرفة الإيرادات العالية والمنخفضة
+import pandas as pd
+import numpy as np
+
+df["performance"] = np.where(df["revenue"] >= 1200, "High", "Low")
+
+# عرض البيانات
+print(df)
+
+#7ارسال البيانات بالعمود الجديد  لملف اكسيل موجود على سطح المكتب بإسم 
+#data 2025
+
+df.to_excel("C:/Users/CS/Desktop/data 2025.xlsx", index=False)
+
+
