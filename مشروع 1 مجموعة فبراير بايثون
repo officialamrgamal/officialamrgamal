@@ -13,18 +13,21 @@ print(df)
 #3 لمعرفة الهيكله وعدد الصفوف والأعمدة
 print(df.info())
 
-#4 
+#4 لعرض اول 5 صفوف بتنفع مع الجداول الكبيرة 30 ألف صف
+print(df.head()) 
+
+#5 
 average_revenue = df['revenue'].mean()
 print("متوسط الإيرادات:", average_revenue)
 
 
 
-#5 جدول محوري
+#6 جدول محوري
 
 pivot_table = df.pivot_table(values='revenue', index='region', aggfunc='sum')
 print(pivot_table)
 
-#6 قم بإستخدام مكتبة pandas & numpy لعمل عمود جديد لمعرفة الإيرادات العالية والمنخفضة
+#7 قم بإستخدام مكتبة pandas & numpy لعمل عمود جديد لمعرفة الإيرادات العالية والمنخفضة
 import pandas as pd
 import numpy as np
 
@@ -33,7 +36,7 @@ df["performance"] = np.where(df["revenue"] >= 1200, "High", "Low")
 # عرض البيانات
 print(df)
 
-#7ارسال البيانات بالعمود الجديد  لملف اكسيل موجود على سطح المكتب بإسم 
+#8ارسال البيانات بالعمود الجديد  لملف اكسيل موجود على سطح المكتب بإسم 
 #data 2025
 
 df.to_excel("C:/Users/CS/Desktop/data 2025.xlsx", index=False)
