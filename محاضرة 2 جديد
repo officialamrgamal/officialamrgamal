@@ -22,3 +22,20 @@ df = df.dropna(subset=['revenue'])
 
 df.dropna(inplace=True)
 
+
+
+#MAT1
+import matplotlib.pyplot as plt
+
+
+
+plt.figure(figsize=(8, 8))
+plt.pie(region_revenue, labels=region_revenue.index, autopct='%1.1f%%', 
+        startangle=140, wedgeprops={'width': 0.4})
+
+# إضافة العنوان
+plt.title("Revenues by Region")
+
+# عرض المخطط
+plt.show()
+
