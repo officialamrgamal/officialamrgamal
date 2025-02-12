@@ -12,6 +12,26 @@ df.fillna(0, inplace=True)
 print(df)
 
 
+#mat 1
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# قراءة ملف الإكسيل
+file_name = "بيانات مناطق.csv"
+
+df = pd.read_csv(file_name, sep=';')
+# تجميع البيانات حسب المنطقة وحساب الإيرادات
+df.groupby('region')['revenue'].sum().plot(kind='bar')
+
+# إضافة العنوان والعناوين للمحاور
+plt.title("revenues by Region")
+plt.xlabel("region")
+plt.ylabel("revenues")
+
+# عرض الرسم البياني
+plt.show()
+
+
 #او  هنستخدم سطرين كود 
 # تحديد الأعمدة الرقمية فقط
 numeric_cols = df.select_dtypes(include=['number']).columns
@@ -34,17 +54,55 @@ print(df)
 
 
 #MAT1
+import pandas as pd
 import matplotlib.pyplot as plt
+import arabic_reshaper
+from bidi.algorithm import get_display
 
+# قراءة ملف الإكسل
+file_name = "بيانات مناطق.csv"
+df = pd.read_csv(file_name, sep=';', encoding='utf-8-sig')
 
+# تحويل الإيرادات إلى أرقام والتخلص من القيم غير الصالحة
+df['revenue'] = pd.to_numeric(df['revenue'], errors='coerce')
+df_cleaned = df.dropna(subset=['revenue'])
 
+# تجميع البيانات حسب المنطقة وحساب الإيرادات
+region_revenue = df_cleaned.groupby('region')['revenue'].sum()
+
+# إعادة تشكيل النصوص العربية لضمان ظهورها بشكل صحيح
+regions = [get_display(arabic_reshaper.reshape(str(region))) for region in region_revenue.index]
+
+# رسم مخطط الدونات
 plt.figure(figsize=(8, 8))
-plt.pie(region_revenue, labels=region_revenue.index, autopct='%1.1f%%', 
-        startangle=140, wedgeprops={'width': 0.4})
+plt.pie(region_revenue, labels=regions, autopct='%1.1f%%', 
+        startangle=140, wedgeprops={'width': 0.4}, textprops={'fontsize': 12, 'fontname': 'Tahoma'})
 
-# إضافة العنوان
-plt.title("Revenues by Region")
+# إضافة العنوان مع دعم العربية
+plt.title(get_display(arabic_reshaper.reshape("نسبة الإيرادات حسب المنطقة")), fontsize=14, fontname="Tahoma")
 
 # عرض المخطط
 plt.show()
 
+
+
+#44
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import arabic_reshaper
+from bidi.algorithm import get_display
+
+
+
+
+# ضبط حجم الشكل
+plt.figure(figsize=(8, 6))
+
+# إنشاء جدول حراري باستخدام heatmap
+sns.heatmap(df_cleaned.pivot_table(index="region", values="revenue", aggfunc="sum"), 
+            annot=True, fmt=".0f", cmap="coolwarm", linewidths=1, linecolor="black")
+
+
+# عرض الجدول
+plt.show()
