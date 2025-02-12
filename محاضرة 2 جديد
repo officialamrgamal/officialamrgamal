@@ -22,6 +22,57 @@ df.fillna(0, inplace=True)
 print(df)
 
 
+## تحويل عمود 'data' إلى نوع تاريخي
+df["data"] = pd.to_datetime(df["data"], errors='coerce')
+
+df["day_name"] = df["data"].dt.day_name()  # اسم اليوم (مثل الأحد، الإثنين)
+df["month_name"] = df["data"].dt.month_name()  # اسم الشهر (يناير، فبراير)
+
+print(df[["data", "day_name", "month_name"]])
+
+#2 date
+df["year"] = df["data"].dt.year
+df["month"] = df["data"].dt.month
+df["day"] = df["data"].dt.day
+df["hour"] = df["data"].dt.hour
+df["minute"] = df["data"].dt.minute
+df["second"] = df["data"].dt.second
+
+print(df[["data", "year", "month", "day", "hour", "minute", "second"]])
+
+
+#date 3 حساب الفارق الزمني 
+df["data"] = pd.to_datetime(df["data"])  # التأكد من نوع العمود
+df["days_since"] = (df["data"] - df["data"].min()).dt.days
+
+print(df[["data", "days_since"]])
+
+
+# فرق الايام 
+df["prev_date"] = df["data"].shift(1)  # إزاحة القيم للحصول على التاريخ السابق
+df["diff_days"] = (df["data"] - df["prev_date"]).dt.days  # الفرق بالأيام
+
+print(df[["data", "prev_date", "diff_days"]])
+
+# اول الشهر من نفس التاريخ 
+
+df["month_start"] = df["data"].dt.to_period("M").dt.start_time
+print(df[["data", "month_start"]])
+
+
+#رقم الاسبوع من السنة 
+
+df["week_number"] = df["data"].dt.isocalendar().week
+print(df[["data", "week_number"]])
+
+# استخراج اسم اليوم والشهر 
+
+df["day_name"] = df["data"].dt.day_name()
+df["month_name"] = df["data"].dt.month_name()
+
+# عرض النتيجة
+print(df[["data", "day_name", "month_name"]])
+
 #mat 1
 import pandas as pd
 import matplotlib.pyplot as plt
