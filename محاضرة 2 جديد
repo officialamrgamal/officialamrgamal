@@ -1,10 +1,11 @@
 #1 للتعرف على القيم المفقودة في اي عمود 
 
 df.isna().sum()
-
+print(df)
 
 #2 لملء القيم المفقودة بمتوسط القيم في عمود الايرادات
 df['revenue'].fillna(df['revenue'].mean(), inplace=True)
+print(df)
 
 #او  هنستخدم سطرين كود 
 # تحديد الأعمدة الرقمية فقط
@@ -12,15 +13,18 @@ numeric_cols = df.select_dtypes(include=['number']).columns
 
 # استبدال القيم المفقودة في الأعمدة الرقمية فقط بالمتوسط
 df[numeric_cols] = df[numeric_cols].apply(lambda col: col.fillna(col.mean()))
+print(df)
 
 #2 لحذف الصف الي فيه قيم مفقودة # 2. تنظيف البيانات (حذف الصفوف التي تحتوي على قيم مفقودة في العمود 'revenue')
 
 df = df.dropna(subset=['revenue'])
+print(df)
 
 
 #4لحذف جميع الصفوف التي تحتوي على أي قيمة مفقودة في أي عمود:
 
 df.dropna(inplace=True)
+print(df)
 
 
 
