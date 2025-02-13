@@ -11,7 +11,7 @@ print(df)
 #1 للتعرف على القيم المفقودة في اي عمود 
 
 df.isna().sum()
-print(df)
+#ضعها لوحدها للتعرف على القيم الفارغه لو revenue = 1 اذا يوجد قيمة واحدة مفقودة في الايرادات 
 
 #2 لملء القيم المفقودة بمتوسط القيم في عمود الايرادات
 df['revenue'].fillna(df['revenue'].mean(), inplace=True)
@@ -25,9 +25,14 @@ print(df)
 ## تحويل عمود 'data' إلى نوع تاريخي
 df["data"] = pd.to_datetime(df["data"], errors='coerce')
 
+#السلاسل الزمنية في pandas مننساش مهم جدا الكود السابق لتحويل اعمدة بها تواريخ الى تواريخ 
+
+#1 عمل عمود به اسماء الأيام 
 df["day_name"] = df["data"].dt.day_name()  # اسم اليوم (مثل الأحد، الإثنين)
 df["month_name"] = df["data"].dt.month_name()  # اسم الشهر (يناير، فبراير)
 
+print(df)
+#or هتطبع المتغير فقط
 print(df[["data", "day_name", "month_name"]])
 
 #2 date
@@ -38,17 +43,25 @@ df["hour"] = df["data"].dt.hour
 df["minute"] = df["data"].dt.minute
 df["second"] = df["data"].dt.second
 
+print(df)
+#orتطبع المتغييرات فقط 
 print(df[["data", "year", "month", "day", "hour", "minute", "second"]])
 
+#معرفة الربع والنصف سنوي 
+df["quarter"] = df["data"].dt.quarter  # استخراج الربع (Q1, Q2, Q3, Q4)
+df["semester"] = df["data"].dt.month.map(lambda x: 1 if x <= 6 else 2)  # تصنيف إلى نصفين سنويين
 
-#date 3 حساب الفارق الزمني 
+print(df[["data", "quarter", "semester"]])
+
+
+#date  حساب الفارق الزمني ما بين تاريخ اخر فاتورة مع الي قبلها 
 df["data"] = pd.to_datetime(df["data"])  # التأكد من نوع العمود
 df["days_since"] = (df["data"] - df["data"].min()).dt.days
 
 print(df[["data", "days_since"]])
 
 
-# فرق الايام 
+# فرق الايام ما بين التاريخين مع ظهور اخر تاريخ فاتورة مع الي قبلها
 df["prev_date"] = df["data"].shift(1)  # إزاحة القيم للحصول على التاريخ السابق
 df["diff_days"] = (df["data"] - df["prev_date"]).dt.days  # الفرق بالأيام
 
