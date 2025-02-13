@@ -6,7 +6,7 @@ file_name = "بيانات مناطق.csv"
 df = pd.read_csv(file_name, sep=';')
 pd.set_option("display.max_rows", None)
 print(df)
-
+#جزء تنظيف البيانات pandas
 
 #1 للتعرف على القيم المفقودة في اي عمود 
 
@@ -20,6 +20,22 @@ print(df)
 #او ملأ  بصفر
 df.fillna(0, inplace=True)
 print(df)
+
+#او  هنستخدم سطرين كود 
+
+
+#2 لحذف الصف الي فيه قيم مفقودة # 2. تنظيف البيانات (حذف الصفوف التي تحتوي على قيم مفقودة في العمود 'revenue')
+
+df = df.dropna(subset=['revenue'])
+print(df)
+
+
+#4لحذف جميع الصفوف التي تحتوي على أي قيمة مفقودة في أي عمود:
+
+df.dropna(inplace=True)
+print(df)
+
+
 
 
 ## تحويل عمود 'data' إلى نوع تاريخي
@@ -67,10 +83,10 @@ df["diff_days"] = (df["data"] - df["prev_date"]).dt.days  # الفرق بالأ�
 
 print(df[["data", "prev_date", "diff_days"]])
 
-# اول الشهر من نفس التاريخ 
+# اول الشهر من نفس التاريخ ويعرض بيانات نفس التاريخ مع اول الشهر مع طباعة الإيرادات
 
 df["month_start"] = df["data"].dt.to_period("M").dt.start_time
-print(df[["data", "month_start"]])
+print(df[["data", "revenue", "month_start"]])
 
 
 #رقم الاسبوع من السنة 
@@ -78,21 +94,14 @@ print(df[["data", "month_start"]])
 df["week_number"] = df["data"].dt.isocalendar().week
 print(df[["data", "week_number"]])
 
-# استخراج اسم اليوم والشهر 
 
-df["day_name"] = df["data"].dt.day_name()
-df["month_name"] = df["data"].dt.month_name()
 
-# عرض النتيجة
-print(df[["data", "day_name", "month_name"]])
-
-#mat 1
+#mat 1 مخطط اعمدة بمكتبة matplotlib
 import pandas as pd
 import matplotlib.pyplot as plt
 
 # قراءة ملف الإكسيل
 file_name = "بيانات مناطق.csv"
-
 df = pd.read_csv(file_name, sep=';')
 # تجميع البيانات حسب المنطقة وحساب الإيرادات
 df.groupby('region')['revenue'].sum().plot(kind='bar')
@@ -106,40 +115,10 @@ plt.ylabel("revenues")
 plt.show()
 
 
-#او  هنستخدم سطرين كود 
-# تحديد الأعمدة الرقمية فقط
-numeric_cols = df.select_dtypes(include=['number']).columns
-
-# استبدال القيم المفقودة في الأعمدة الرقمية فقط بالمتوسط
-df[numeric_cols] = df[numeric_cols].apply(lambda col: col.fillna(col.mean()))
-print(df)
-
-#2 لحذف الصف الي فيه قيم مفقودة # 2. تنظيف البيانات (حذف الصفوف التي تحتوي على قيم مفقودة في العمود 'revenue')
-
-df = df.dropna(subset=['revenue'])
-print(df)
-
-
-#4لحذف جميع الصفوف التي تحتوي على أي قيمة مفقودة في أي عمود:
-
-df.dropna(inplace=True)
-print(df)
 
 
 
-### تحويل عمود 'data' إلى نوع تاريخي
-df["data"] = pd.to_datetime(df["data"], errors='coerce')
-
-# استخراج السنة، الشهر، اليوم
-df["year"] = df["data"].dt.year
-df["month"] = df["data"].dt.month
-df["day"] = df["data"].dt.day
-
-# عرض البيانات بعد التحليل
-print(df[["data", "year", "month", "day"]])
-
-
-#MAT1
+#MAT2
 import pandas as pd
 import matplotlib.pyplot as plt
 import arabic_reshaper
@@ -171,23 +150,34 @@ plt.title(get_display(arabic_reshaper.reshape("نسبة الإيرادات حس�
 plt.show()
 
 
+#كود تثبيت المكاتب العربية 
+import sys
+!{sys.executable} -m pip install arabic-reshaper python-bidi
 
-#44
+
+
+
+#SEABORN عربي مشروع كامل بعد حذف القيم الفارغه في عمود الايرادات
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import arabic_reshaper
 from bidi.algorithm import get_display
 
+# تحميل البيانات
+file_name = "بيانات مناطق.csv"
+df = pd.read_csv(file_name, sep=';', encoding='utf-8-sig')
 
+df_cleaned = df.dropna(subset=['revenue'])
 
+# إعادة تشكيل أسماء المناطق بالعربية حتى تظهر بشكل صحيح
+df_cleaned['region'] = df_cleaned['region'].apply(lambda x: get_display(arabic_reshaper.reshape(x)))
 
-# ضبط حجم الشكل
-plt.figure(figsize=(8, 6))
-
+# ضبط حجم ا
 # إنشاء جدول حراري باستخدام heatmap
 sns.heatmap(df_cleaned.pivot_table(index="region", values="revenue", aggfunc="sum"), 
-            annot=True, fmt=".0f", cmap="coolwarm", linewidths=1, linecolor="black")
+ annot=True, fmt=".0f", cmap="coolwarm", linewidths=1, linecolor="black")
+
 
 
 # عرض الجدول
