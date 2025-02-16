@@ -1,0 +1,85 @@
+#1 بتحليل العلاقة بين سعر المنتج والمبيعات الإجمالية باستخدام الانحدار الخطي.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+
+
+# استخراج المتغيرات المستقلة والتابعة
+X = df[["Price"]].values  # المتغير المستقل (السعر)
+y = df["Total_Sales"].values  # المتغير التابع (إجمالي المبيعات)
+
+# إنشاء نموذج الانحدار الخطي وتدريبه
+model = LinearRegression()
+model.fit(X, y)
+
+# توقع القيم باستخدام النموذج
+y_pred = model.predict(X)
+
+# رسم البيانات الفعلية
+plt.figure(figsize=(10, 5))
+plt.scatter(df["Price"], df["Total_Sales"], color="blue", label="act Data")
+
+# رسم خط الانحدار الخطي
+plt.plot(df["Price"], y_pred, color="red", label="Linear regression")
+
+# إعدادات الرسم
+plt.xlabel("price")
+plt.ylabel("total sales")
+plt.title("Linear regression")
+plt.legend()
+plt.grid()
+plt.show()
+
+
+#2 رسم box plot يعطي صورة سريعة عن متوسط الأسعار والمبيعات
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+# إنشاء مخطط Box Plot للأسعار وإجمالي المبيعات
+plt.figure(figsize=(12, 6))
+
+# رسم Box Plot للأسعار
+plt.subplot(1, 2, 1)
+plt.boxplot(df["Price"], vert=True, patch_artist=True)
+plt.title("Box Plot of Prices")
+plt.ylabel("Price")
+
+# رسم Box Plot لإجمالي المبيعات
+plt.subplot(1, 2, 2)
+plt.boxplot(df["Total_Sales"], vert=True, patch_artist=True)
+plt.title("Box Plot of Total Sales")
+plt.ylabel("Total Sales")
+
+# عرض الرسم
+plt.tight_layout()
+plt.show()
+
+
+
+#3خمس قيم إحصائية مهمة
+mean_sales = df["Total_Sales"].mean()
+
+# حساب الوسيط (القيمة الوسطى)
+median_sales = df["Total_Sales"].median()
+
+
+# حساب الانحراف المعياري (لقياس التشتت)
+std_sales = df["Total_Sales"].std()
+
+# حساب القيم الدنيا والقصوى
+min_sales = df["Total_Sales"].min()
+max_sales = df["Total_Sales"].max()
+
+# عرض النتائج
+print(f"متوسط المبيعات: {mean_sales:.2f}")
+print(f"الوسيط: {median_sales:.2f}")
+print(f"الانحراف المعياري: {std_sales:.2f}")
+print(f"أقل مبيعات: {min_sales:.2f}")
+print(f"أعلى مبيعات: {max_sales:.2f}")
+
+
+#4
+
