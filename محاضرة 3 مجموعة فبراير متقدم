@@ -81,5 +81,106 @@ print(f"أقل مبيعات: {min_sales:.2f}")
 print(f"أعلى مبيعات: {max_sales:.2f}")
 
 
-#4
+#4  تحديد المنتجات الأكثر مبيعاً عن طريق تحديد عدد التكرارات والنسب من المبيعات 
+product_counts = df["Product"].value_counts()
+
+# حساب نسبة كل منتج من إجمالي البيانات
+product_percentage = df["Product"].value_counts(normalize=True) * 100
+
+# عرض النتائج
+print("تكرار المنتجات:")
+print(product_counts)
+
+print("\nنسبة المنتجات من إجمالي البيانات:")
+print(product_percentage)
+
+
+#5تحليلاً محسناً للمبيعات اليومية
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
+df["Date"] = pd.to_datetime(df["Date"], errors="coerce")  # تحويل التواريخ
+daily_sales = df.groupby("Date")["Total_Sales"].sum()  # تجميع المبيعات
+
+plt.figure(figsize=(12, 6))
+plt.plot(daily_sales, marker="o", linestyle="-", color="b")  # الرسم مباشرة باستخدام الفهرس (التواريخ)
+
+plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))  
+
+plt.title("اتجاه المبيعات اليومي")
+plt.xticks(rotation=45)
+plt.grid()
+plt.show()
+
+#او 
+6
+import matplotlib.pyplot as plt
+
+# رسم مبيعات الهواتف
+plt.figure(figsize=(10, 5))
+plt.bar(phone_sales["Date"], phone_sales["Total_Sales"], color="blue")
+plt.title("مبيعات الهواتف")
+plt.xlabel("التاريخ")
+plt.ylabel("إجمالي المبيعات")
+plt.xticks(rotation=45)
+plt.show()
+
+
+
+#7 لمعرفة اعلى منتجات مبيعا اكبر من مبلغ معين
+high_sales = df[df["Total_Sales"] > 5000]
+print(high_sales)
+print(high_sales.head())
+
+
+#8 
+phone_sales = df[df["Product"] == "Phone"]
+print(phone_sales.head(10))
+print(phone_sales)
+
+#9 تجميع المبيعات لكل منتج
+product_sales = df.groupby("Product")["Total_Sales"].sum().reset_index()
+
+# ترتيب المنتجات بناءً على إجمالي المبيعات تنازليًا
+top_products = product_sales.sort_values(by="Total_Sales", ascending=False)
+
+# استخراج أفضل 3 منتجات من حيث المبيعات (رقم 1)
+top_3_products = top_products.head(3)
+
+# استخراج المنتجات في المراكز 4-6 (رقم 2)
+next_3_products = top_products.iloc[3:6]
+
+# استخراج المنتجات في المراكز 7-9 (رقم 3)
+third_3_products = top_products.iloc[6:9]
+
+# عرض النتائج
+print(" أفضل 3 منتجات رقم 1:")
+print(top_3_products)
+
+print(" أفضل 3 منتجات رقم 2:")
+print(next_3_products)
+
+print(" أفضل 3 منتجات رقم 3:")
+print(third_3_products)
+
+#10 حساب الربع الأدنى للمنتجات 
+import pandas as pd
+
+# تجميع إجمالي المبيعات لكل منتج
+sales_summary = df.groupby("Product")["Total_Sales"].sum().reset_index()
+
+# حساب الربع الأدنى (Q1) للمبيعات بعد التجميع
+Q1 = sales_summary["Total_Sales"].quantile(0.25)
+
+# استخراج المنتجات ذات المبيعات المنخفضة (أقل من أو يساوي Q1)
+low_sales_products = sales_summary[sales_summary["Total_Sales"] <= Q1]
+
+# عرض النتائج
+print(low_sales_products)
+
+
+
 
