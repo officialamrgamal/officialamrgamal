@@ -1,0 +1,36 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+
+# 1. استخراج المتغيرات المستقلة والتابعة
+X = df[["Price"]].values  # المتغير المستقل (السعر)
+y = df["Total_Sales"].values  # المتغير التابع (إجمالي المبيعات)
+
+# 2. تقسيم البيانات إلى مجموعتي تدريب واختبار
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 3. إنشاء وتدريب نموذج الانحدار الخطي
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# 4. توقع القيم باستخدام النموذج
+y_pred = model.predict(X_test)
+
+# 5. تقييم أداء النموذج
+r2 = r2_score(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+print(f"R-squared: {r2:.2f}")
+print(f"Mean Squared Error: {mse:.2f}")
+
+# 6. رسم البيانات الفعلية وخط الانحدار
+plt.figure(figsize=(10, 5))
+plt.scatter(X_test, y_test, color="blue", label="Actual Data")
+plt.plot(X_test, y_pred, color="red", label="Linear Regression")
+plt.xlabel("Price")
+plt.ylabel("Total Sales")
+plt.title("Linear Regression")
+plt.legend()
+plt.grid()
+plt.show()
