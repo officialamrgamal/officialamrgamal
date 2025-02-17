@@ -114,7 +114,10 @@ plt.ylabel("revenues")
 # عرض الرسم البياني
 plt.show()
 
-
+#يجب تثبيته قبل الاستعانه بمكاتب اصلاح اللغة العربية  نضعه في سطر كود ثم تشغيل 
+#كود تثبيت المكاتب العربية 
+import sys
+!{sys.executable} -m pip install arabic-reshaper python-bidi
 
 
 
@@ -150,9 +153,6 @@ plt.title(get_display(arabic_reshaper.reshape("نسبة الإيرادات حس�
 plt.show()
 
 
-#كود تثبيت المكاتب العربية 
-import sys
-!{sys.executable} -m pip install arabic-reshaper python-bidi
 
 
 
