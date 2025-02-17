@@ -33,7 +33,7 @@ plt.grid()
 plt.show()
 
 
-#2 رسم box plot يعطي صورة سريعة عن متوسط الأسعار والمبيعات
+#2 رسم box plot يعطي صورة سريعة عن الوسيط في الأسعار والمبيعات
 import pandas as pd
 import matplotlib.pyplot as plt
 
