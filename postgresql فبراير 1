@@ -1,0 +1,18 @@
+
+DROP TABLE IF EXISTS new_region;
+
+CREATE TABLE new_region (
+    region TEXT,
+    revenue NUMERIC,
+    "date" DATE
+);
+
+COPY new_region(region, revenue, "date")
+FROM 'C:\\data\\new region.csv'
+DELIMITER ';'
+CSV HEADER;
+SELECT * FROM new_region;
+
+
+UPDATE new_region 
+SET region = TRIM(REGEXP_REPLACE(region, '[ ]+', ' ', 'g'));
