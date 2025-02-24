@@ -1,12 +1,14 @@
-
+# حذف الجدول اذا كان موجود مسباقا
 DROP TABLE IF EXISTS new_region;
 
+#انشاء الجدول
 CREATE TABLE new_region (
     region TEXT,
     revenue NUMERIC,
     "date" DATE
 );
 
+#استيراد الجدول 
 COPY new_region(region, revenue, "date")
 FROM 'C:\\data\\new region.csv'
 DELIMITER ';'
@@ -40,5 +42,17 @@ SET revenue_category = CASE
     ELSE 'High'
 END;
 
+#سلاسل زمنية 1 
+ALTER TABLE new_region ADD COLUMN year INT;
+ALTER TABLE new_region ADD COLUMN month INT;
+ALTER TABLE new_region ADD COLUMN day INT;
+
+UPDATE new_region
+SET year = EXTRACT(YEAR FROM date),
+    month = EXTRACT(MONTH FROM date),
+    day = EXTRACT(DAY FROM date);
+
+
+#
 
 
