@@ -1,0 +1,50 @@
+#نضعها في public schema 
+ثم نكتب هذا الكود 
+
+-- التأكد من حذف الجداول إذا كانت موجودة مسبقًا
+
+
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS customers;
+
+-- إنشاء جدول العملاء داخل public schema
+CREATE TABLE public.customers (
+    customer_id SERIAL PRIMARY KEY,
+    customer_name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone TEXT
+);
+
+-- إنشاء جدول المعاملات داخل public schema
+CREATE TABLE public.transactions (
+    transaction_id INT PRIMARY KEY,  
+    customer_id INT REFERENCES public.customers(customer_id) ON DELETE CASCADE,  
+    amount NUMERIC NOT NULL CHECK (amount > 0),  
+    transaction_date DATE NOT NULL  
+);
+
+-- استيراد البيانات إلى جدول customers
+COPY public.customers(customer_id, customer_name, email, phone)
+FROM 'C:\\data\\customers.csv'
+DELIMITER ';' 
+CSV HEADER;
+
+-- استيراد البيانات إلى جدول transactions
+COPY public.transactions(transaction_id, customer_id, amount, transaction_date)
+FROM 'C:\\data\\transactions.csv'
+DELIMITER ';' 
+CSV HEADER;
+
+-- استعراض جميع البيانات من جدول customers
+SELECT * FROM public.customers;
+
+-- استعراض جميع البيانات من جدول transactions
+SELECT * FROM public.transactions;
+
+-- تنفيذ استعلام الربط بين الجدولين
+SELECT public.customers.customer_name, 
+       public.transactions.transaction_date, 
+       public.transactions.amount
+FROM public.customers
+JOIN public.transactions 
+ON public.customers.customer_id = public.transactions.customer_id;
