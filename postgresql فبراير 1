@@ -13,6 +13,8 @@ COPY new_region(region, revenue, "date")
 FROM 'C:\\data\\new region.csv'
 DELIMITER ';'
 CSV HEADER;
+
+#عرض البيانات
 SELECT * FROM new_region;
 
 #ازالة المسافات
@@ -28,6 +30,13 @@ UPDATE new_region SET revenue = COALESCE(revenue, 0);
 
 #تقريب
 UPDATE new_region SET revenue = ROUND(revenue, 2);
+
+
+#SELECT * FROM new_region LIMIT 5;
+
+SELECT COUNT(*) FROM new_region;
+
+
 
 #ازاله التكرارات 
 DELETE FROM new_region 
@@ -54,5 +63,8 @@ SET year = EXTRACT(YEAR FROM date),
 
 
 #
-
+عرض اسماء الاعمدة 
+SELECT column_name 
+FROM information_schema.columns 
+WHERE table_name = 'new_region';
 
