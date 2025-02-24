@@ -21,6 +21,25 @@ SELECT * FROM new_region;
 UPDATE new_region 
 SET region = TRIM(REGEXP_REPLACE(region, '[ ]+', ' ', 'g'));
 
+# تعويض القيم المفقودة  بالمتوسط
+UPDATE new_region 
+SET revenue = (SELECT AVG(revenue) FROM new_region)
+WHERE revenue IS NULL;
+
+
+
+# تسريع فهرس المناطق
+CREATE INDEX idx_region ON new_region(region);
+
+
+#حذف الايرادات  السلبية او الصفرية
+DELETE FROM new_region WHERE revenue <= 0;
+
+
+# الاجمالي لكل منطقة
+SELECT region, SUM(revenue) AS total_revenue FROM new_region GROUP BY region;
+# ولكن مينفعش معاه كود اظهار جميع الصفوف !
+SELECT * FROM new_region;
 #تحويل اول حرف 
 UPDATE new_region SET region = INITCAP(region);
 
