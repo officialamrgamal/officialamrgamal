@@ -40,6 +40,30 @@ DELETE FROM new_region WHERE revenue <= 0;
 SELECT region, SUM(revenue) AS total_revenue FROM new_region GROUP BY region;
 # ولكن مينفعش معاه كود اظهار جميع الصفوف !
 SELECT * FROM new_region;
+
+#متوسط الايراد لكل منطقة 
+SELECT region, AVG(revenue) AS avg_revenue FROM new_region GROUP BY region;
+
+# حساب العمليات لكل منطقة 
+SELECT region, COUNT(*) AS transaction_count FROM new_region GROUP BY region;
+ ترتيب المناطق حسب إجمالي الإيرادات#
+#SELECT region, SUM(revenue) AS total_revenue FROM new_region GROUP BY region ORDER BY total_revenue DESC;
+
+#ترتيب البيانات حسب الاحدث
+SELECT * FROM new_region ORDER BY date DESC;
+
+#حساب إجمالي الإيرادات لكل شهر
+SELECT DATE_TRUNC('month', date) AS month, SUM(revenue) AS total_revenue FROM new_region GROUP BY month ORDER BY month;
+
+#حساب اجمالي المناطق اكبر من 30 الف 
+SELECT region, SUM(revenue) AS total_revenue FROM new_region GROUP BY region HAVING SUM(revenue) > 30000;
+
+#حذف التكرارات المحتملة في الجدول 
+DELETE FROM new_region WHERE ctid NOT IN (SELECT MIN(ctid) FROM new_region GROUP BY region, revenue, date);
+
+# البحث عن اكثر منطقتين مبيعات 
+SELECT region, SUM(revenue) AS total_revenue FROM new_region GROUP BY region ORDER BY total_revenue DESC LIMIT 2;
+
 #تحويل اول حرف 
 UPDATE new_region SET region = INITCAP(region);
 
