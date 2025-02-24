@@ -13,6 +13,32 @@ DELIMITER ';'
 CSV HEADER;
 SELECT * FROM new_region;
 
-
+#ازالة المسافات
 UPDATE new_region 
 SET region = TRIM(REGEXP_REPLACE(region, '[ ]+', ' ', 'g'));
+
+#تحويل اول حرف 
+UPDATE new_region SET region = INITCAP(region);
+
+#استبدال ال null ب صفر
+UPDATE new_region SET revenue = COALESCE(revenue, 0);
+
+
+#تقريب
+UPDATE new_region SET revenue = ROUND(revenue, 2);
+
+#ازاله التكرارات 
+DELETE FROM new_region 
+WHERE ctid NOT IN (SELECT MIN(ctid) FROM new_region GROUP BY region, revenue, date);
+
+#زيادة تصنيف 
+ALTER TABLE new_region ADD COLUMN revenue_category TEXT;
+UPDATE new_region
+SET revenue_category = CASE 
+    WHEN revenue < 1000 THEN 'Low'
+    WHEN revenue BETWEEN 1000 AND 5000 THEN 'Medium'
+    ELSE 'High'
+END;
+
+
+
