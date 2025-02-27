@@ -80,3 +80,6 @@ GROUP BY year, month;
 
 SELECT MAX(revenue) AS max_revenue, MIN(revenue) AS min_revenue FROM new_region;
 
+
+#تغير نوع البيانات 
+ALTER TABLE new_region ALTER COLUMN revenue TYPE NUMERIC(10,2);
