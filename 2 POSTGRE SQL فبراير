@@ -1,0 +1,82 @@
+
+#تقريب
+UPDATE new_region SET revenue = ROUND(revenue, 2);
+
+#تعرض اول 5
+#SELECT * FROM new_region LIMIT 5;
+
+#تجمع عدد المناطق
+SELECT COUNT(*) FROM new_region;
+
+
+
+#ازاله التكرارات 
+DELETE FROM new_region 
+WHERE ctid NOT IN (SELECT MIN(ctid) FROM new_region GROUP BY region, revenue, date);
+
+#زيادة تصنيف 
+ALTER TABLE new_region ADD COLUMN revenue_category TEXT;
+UPDATE new_region
+SET revenue_category = CASE 
+    WHEN revenue < 1000 THEN 'Low'
+    WHEN revenue BETWEEN 1000 AND 5000 THEN 'Medium'
+    ELSE 'High'
+END;
+
+#سلاسل زمنية 1 
+ALTER TABLE new_region ADD COLUMN year INT;
+ALTER TABLE new_region ADD COLUMN month INT;
+ALTER TABLE new_region ADD COLUMN day INT;
+
+UPDATE new_region
+SET year = EXTRACT(YEAR FROM date),
+    month = EXTRACT(MONTH FROM date),
+    day = EXTRACT(DAY FROM date);
+
+
+#
+عرض اسماء الاعمدة 
+SELECT column_name 
+FROM information_schema.columns 
+WHERE table_name = 'new_region';
+
+
+
+#هام معالجات على حسب الفصول الشهرية 
+SELECT 
+    CASE 
+        WHEN month IN (12, 1, 2) THEN 'Winter'
+        WHEN month IN (3, 4, 5) THEN 'Spring'
+        WHEN month IN (6, 7, 8) THEN 'Summer'
+        ELSE 'Fall'
+    END AS season, 
+    SUM(revenue) AS total_revenue
+FROM new_region
+GROUP BY season;
+
+
+# تجميع على حسب الشهر 
+SELECT MONTH, SUM(revenue) 
+FROM new_region 
+GROUP BY MONTH;
+
+# تجميع على حسب السنة 
+SELECT YEAR, SUM(revenue) 
+FROM new_region 
+GROUP BY YEAR;
+
+
+
+#بيحسب الفرق ما بين كل شهر 
+SELECT year, month, 
+       SUM(revenue) AS total_revenue,
+       SUM(revenue) - LAG(SUM(revenue)) OVER (
+	   ORDER BY year, month) AS month_change
+FROM new_region
+GROUP BY year, month;
+
+
+#احسب اعلى واقل ايراد 
+
+SELECT MAX(revenue) AS max_revenue, MIN(revenue) AS min_revenue FROM new_region;
+
