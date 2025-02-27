@@ -83,3 +83,77 @@ SELECT MAX(revenue) AS max_revenue, MIN(revenue) AS min_revenue FROM new_region;
 
 #تغير نوع البيانات 
 ALTER TABLE new_region ALTER COLUMN revenue TYPE NUMERIC(10,2);
+
+
+5 اخطاء شائعة 
+1- القيم الفارغه 
+طريقة اكتشافها 
+
+SELECT * FROM new_region WHERE region IS NULL OR region = '';
+
+حل المشكلة 
+حذف الصفوف او التعويض مثل بالمتوسط بالصفر 
+طريقة جديدة حذف الفارغ 
+DELETE FROM new_region WHERE region IS NULL OR region = '';
+
+
+
+2- قيم غير رقمية في عمود مثل الايرادات 
+طريقة اكتشافها 
+SELECT * FROM new_region WHERE revenue ~ '[^0-9.]';
+
+
+•	تحويل القيم النصية إلى أرقام إن أمكن:
+
+
+UPDATE new_region SET revenue = REPLACE(revenue, ' ', '') WHERE revenue ~ '[ ]';
+•	حذف السجلات غير القابلة للتحويل:
+
+DELETE FROM new_region WHERE revenue ~ '[^0-9.]';
+
+3- طريقة اكتشاف تواريخ غير صالحة 
+SELECT * FROM new_region WHERE date IS NULL OR date = '0000-00-00' OR date > NOW();
+
+✅ الحل:
+•	تحديد التواريخ غير الصالحة وتصحيحها يدويًا.
+•	تعويض القيم الفارغة بتاريخ افتراضي:
+
+
+UPDATE new_region SET date = '2000-01-01' WHERE date IS NULL;
+
+
+#4 اكتشاف المسافات 
+SELECT * FROM new_region WHERE region LIKE ' %' OR region LIKE '% ';
+
+
+حل 
+UPDATE new_region 
+SET region = TRIM(REGEXP_REPLACE(region, '[ ]+', ' ', 'g'));
+
+
+5- عدم وجود فهرس للتاريخ 
+حل المشكلة 
+CREATE INDEX idx_date ON new_region(date);
+
+
+6-استيراد ملفات csv وفي حالة ان تنسيق اللغة عربي 
+يجب وضع semicolon
+
+
+COPY new_region(region, revenue, "date")
+FROM 'C:\\data\\new region.csv'
+DELIMITER ';'
+CSV HEADER
+ENCODING 'UTF8';
+
+
+7 - هام التأكد من عدم وجود قيم مفقودة في عمود الايرادات 
+
+🔍 اكتشاف المشكلة:
+
+SELECT * FROM new_region WHERE revenue IS NULL;
+
+  الحل 
+حذف عمود الايرادات 
+DELETE FROM new_region WHERE revenue IS NULL OR revenue = '';
+
