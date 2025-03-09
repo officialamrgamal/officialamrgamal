@@ -1,0 +1,88 @@
+import pandas as pd  # استيراد مكتبة Pandas
+
+# قراءة ملف Excel
+df = pd.read_excel("students_data.xlsx")
+
+# عرض أول 5 صفوف من البيانات
+print(df.head())
+
+
+2️⃣ الإحصاء الوصفي (Descriptive Statistics)
+في SPSS، يمكنك الحصول على المتوسط والانحراف المعياري، وفي Python:
+
+
+
+print(df.describe())
+3️⃣ حساب متوسط مستوى التوتر حسب الجنس
+
+print(df.groupby("Gender")["Stress_Level"].mean())
+4️⃣ اختبار T-Test لمقارنة مجموعتين (تجريبي/تحكم)
+
+from scipy.stats import ttest_ind
+
+exp_group = df[df["Group"] == "Experimental"]["Stress_Level"]
+control_group = df[df["Group"] == "Control"]["Stress_Level"]
+
+t_stat, p_value = ttest_ind(exp_group, control_group)
+print(f"T-Statistic: {t_stat}, P-Value: {p_value}")
+🔹 إذا كانت p-value < 0.05، فهذا يعني وجود فرق ذو دلالة إحصائية.
+
+5️⃣ اختبار ANOVA للتحقق مما إذا كانت هناك فروقات بين المجموعات
+python
+Copy
+Edit
+from scipy.stats import f_oneway
+
+anova_result = f_oneway(df[df["Group"] == "Experimental"]["GPA"],
+                        df[df["Group"] == "Control"]["GPA"])
+print(f"F-Statistic: {anova_result.statistic}, P-Value: {anova_result.pvalue}")
+6️⃣ تحليل الارتباط بين عدد ساعات الدراسة والمعدل (Correlation)
+python
+Copy
+Edit
+correlation = df["Study_Hours"].corr(df["GPA"])
+print(f"Correlation between Study Hours and GPA: {correlation}")
+🔹 إذا كانت القيمة قريبة من 1، فهناك ارتباط قوي بين المتغيرين.
+
+7️⃣ تحليل الانحدار الخطي للتنبؤ بالمعدل الدراسي بناءً على عدد ساعات الدراسة
+
+import statsmodels.api as sm
+
+X = df["Study_Hours"]
+y = df["GPA"]
+
+X = sm.add_constant(X)  # إضافة الحد الثابت
+model = sm.OLS(y, X).fit()
+
+print(model.summary())
+🔹 هذا يحل محل تحليل الانحدار في SPSS.
+
+8️⃣ اختبار Chi-Square للتحقق من العلاقة بين الجنس والمجموعة التجريبية
+
+from scipy.stats import chi2_contingency
+
+contingency_table = pd.crosstab(df["Gender"], df["Group"])
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+print(f"Chi-Square: {chi2}, P-Value: {p}")
+🔹 إذا كانت p-value < 0.05، فهناك ارتباط بين الجنس والمجموعة.
+
+9️⃣ رسم مخطط Box Plot لمقارنة مستوى التوتر بين الجنسين
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.boxplot(x="Gender", y="Stress_Level", data=df)
+plt.title("Stress Level by Gender")
+plt.show()
+🔹 يعادل هذا المخطط تحليل الصندوق (Box Plot) في SPSS.
+
+🔟 تحليل التوزيع الطبيعي لمستوى التوتر باستخدام اختبار Shapiro-Wilk
+
+Edit
+from scipy.stats import shapiro
+
+shapiro_test = shapiro(df["Stress_Level"])
+print(f"Shapiro-Wilk Test Statistic: {shapiro_test.statistic}, P-Value: {shapiro_test.pvalue}")
+🔹 إذا كانت p-value < 0.05، فهذا يعني أن البيانات ليست موزعة طبيعيًا.
+
