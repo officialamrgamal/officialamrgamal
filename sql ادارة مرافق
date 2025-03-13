@@ -28,3 +28,28 @@ CSV HEADER
 ENCODING 'UTF8';
 
 select * from facility_management;
+
+
+
+SELECT COUNT(*) AS عدد_السجلات_الناقصة
+FROM facility_management
+WHERE 
+    "رقم العملية" IS NULL OR
+    "نوع الصيانة" IS NULL OR
+    "تاريخ الطلب" IS NULL OR
+    "تاريخ الإنجاز" IS NULL OR
+    "مدة التنفيذ" IS NULL OR
+    "تكلفة الصيانة" IS NULL OR
+    "الموقع" IS NULL OR
+    "حالة الطلب" IS NULL OR
+    "المعدات المعنية" IS NULL OR
+    "عدد الموظفين" IS NULL OR
+    "استهلاك الطاقة" IS NULL OR
+    "معدل الأعطال" IS NULL OR
+    "مستوى الأهمية" IS NULL OR
+    "ملاحظات" IS NULL;
+
+
+
+
+
