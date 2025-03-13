@@ -1,0 +1,30 @@
+DROP TABLE IF EXISTS facility_management;
+
+CREATE TABLE facility_management (
+    "رقم العملية" SERIAL PRIMARY KEY,
+    "نوع الصيانة" VARCHAR(50),
+    "تاريخ الطلب" DATE,
+    "تاريخ الإنجاز" DATE,
+    "مدة التنفيذ" INT,
+    "تكلفة الصيانة" DECIMAL(10,2),
+    "الموقع" VARCHAR(100),
+    "حالة الطلب" VARCHAR(50),
+    "المعدات المعنية" VARCHAR(100),
+    "عدد الموظفين" INT,
+    "استهلاك الطاقة" INT,
+    "معدل الأعطال" FLOAT,
+    "مستوى الأهمية" VARCHAR(50),
+    "ملاحظات" TEXT
+);
+
+COPY facility_management(
+    "رقم العملية", "نوع الصيانة", "تاريخ الطلب", "تاريخ الإنجاز", "مدة التنفيذ",
+    "تكلفة الصيانة", "الموقع", "حالة الطلب", "المعدات المعنية", "عدد الموظفين",
+    "استهلاك الطاقة", "معدل الأعطال", "مستوى الأهمية", "ملاحظات"
+) 
+FROM 'C:/data/faciality management.csv' 
+DELIMITER ';' 
+CSV HEADER 
+ENCODING 'UTF8';
+
+select * from facility_management;
